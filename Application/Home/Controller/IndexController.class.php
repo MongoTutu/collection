@@ -20,6 +20,9 @@ class IndexController extends Controller {
 
     public function add_post(){
         $data['title'] = I('title');
+        if(!$data['title']){
+            $this->error("主题不可以为空！");
+        }
         $data['description'] = I('description');
         $data['time'] = time();
         $data['uid'] = cookie('id');

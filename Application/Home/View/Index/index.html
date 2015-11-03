@@ -15,7 +15,7 @@
 
 <div class="header">
     <div class="logoBar">
-        <div class="logoBars">KStart</div>
+        <div class="logoBars">Startup Database</div>
         <div class="tips">仅作信息收集整合使用</div>
     </div>
     <div class="searchBar wraper">
@@ -27,8 +27,10 @@
 <div class="article">
     <ul class="wraper">
         <li ng-repeat="lst in list | filter:search">
-            <h2><a href="{{ lst.link }}">{{lst.title}}</a></h2>
+            <a href="{{ lst.link }}">
+            <h2>{{lst.title}}</h2>
             <div class="listDescription">{{lst.description}}</div>
+            </a>
             <div class="listDetail">
                 <span class="fa fa-pencil-square-o"></span><i>{{lst.username}}</i>
                 <span class="fa fa-calendar-o ng-binding"></span><i>{{lst.time}}</i>
