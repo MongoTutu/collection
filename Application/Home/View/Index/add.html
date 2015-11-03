@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content ="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="blank">
+<meta name="format-detection" content="telephone=no">
+<title>Home</title>
+<link rel="stylesheet" href="__PUBLIC__/css/app.css">
+<link rel="stylesheet" href="http://cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+</head>
+<body>
+<div class="header">
+    <div class="backHome">
+        <a href="{:U('index')}" class="fa fa-home"></a>
+    </div>
+    <div class="logoBar">
+        <div class="logoBars">创建主题及相关描述</div>
+        <div class="tips">仅作信息收集整合使用</div>
+    </div>
+    <div class="searchBar wraper" style="color:#FFF;">
+        TIPS：描述信息简化精练！
+    </div>
+</div>
+<div class="theme">
+    <div class="wraper">
+        <form action="{:U('add_post')}" method="post">
+            <div class="add_title">
+                <input type="text" name="title" placeholder="主题（参考主题：项目名称，公司名称）">
+            </div>
+            <div class="add_description">
+                <textarea name="description" placeholder="相关描述.."></textarea>
+            </div>
+            <div class="add_submit">
+                <input type="submit" value="创建主题">
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

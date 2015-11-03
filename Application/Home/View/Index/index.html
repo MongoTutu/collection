@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content ="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="blank">
+<meta name="format-detection" content="telephone=no">
+<title>Home</title>
+<link rel="stylesheet" href="__PUBLIC__/css/app.css">
+<link rel="stylesheet" href="http://cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+</head>
+<body ng-controller="ListCtrl">
+
+<div class="header">
+    <div class="logoBar">
+        <div class="logoBars">KStart</div>
+        <div class="tips">仅作信息收集整合使用</div>
+    </div>
+    <div class="searchBar wraper">
+        <input ng-model="search" placeholder="过滤搜索..." type="text">
+        <span class="fa fa-search"></span>
+    </div>
+</div>
+
+<div class="article">
+    <ul class="wraper">
+        <li ng-repeat="lst in list | filter:search">
+            <h2><a href="{{ lst.link }}">{{lst.title}}</a></h2>
+            <div class="listDescription">{{lst.description}}</div>
+            <div class="listDetail">
+                <span class="fa fa-pencil-square-o"></span><i>{{lst.username}}</i>
+                <span class="fa fa-calendar-o ng-binding"></span><i>{{lst.time}}</i>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<div class="add">
+    <a href="{:U('add')}" class="fa fa-plus shadow"></a>
+</div>
+
+</body>
+<script type="text/javascript" src="__PUBLIC__/js/angular.js"></script>
+<script type="text/javascript">
+var app = angular.module('app',[]);
+app.controller('ListCtrl',function($scope){
+    var lists = [];
+    <volist id="ls" name="list">
+    lists.push({
+        title : '{$ls.title}',
+        description : '{$ls.description}',
+        username : '{$ls.username}',
+        time : '{$ls.time|date="Y-m-d H:i:s",###}',
+        link : "{:U('detail',array('id'=>$ls['_id']))}"
+    });
+    </volist>
+    $scope.list = lists;
+});
+</script>
+</html>

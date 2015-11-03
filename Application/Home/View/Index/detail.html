@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content ="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="blank">
+<meta name="format-detection" content="telephone=no">
+<title>Home</title>
+<link rel="stylesheet" href="__PUBLIC__/css/app.css">
+<link rel="stylesheet" href="http://cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+</head>
+<body>
+<div class="header">
+    <div class="backHome">
+        <a href="{:U('index')}" class="fa fa-home"></a>
+    </div>
+    <div class="logoBar">
+        <div class="logoBars">{$theme.title}</div>
+        <div class="tips">
+            <span>{$theme.username} </span>
+            @
+            <span> {$theme.time|date='Y-m-d H:i:s',###}</span>
+        </div>
+    </div>
+    <div class="searchBar wraper" style="color:#FFF;">
+        <div class="dtl_des">
+            {$theme.description}
+        </div>
+    </div>
+</div>
+
+<div class="bbs">
+    <div class="wraper">
+        <volist id="cl" name="child">
+        <div class="bbs_list">
+            <div class="bl_title">
+                <h3>{$cl.title}</h3>
+            </div>
+            <div class="listDetail">
+                <span class="fa fa-pencil-square-o"></span><i>{$cl.username}</i>
+                <span class="fa fa-calendar-o ng-binding"></span><i>{$cl.time|date='Y-m-d H:i:s',###}</i>
+            </div>
+            <div class="bl_content">{$cl.content}</div>
+            <div class="bl_comment bl_comment_{$cl._id}">
+                <div class="bl_comment_bar">
+                    <div class="bcb_a">
+                        <input type="text" placeholder="写下你的想法.." class="input_{$cl._id}">
+                    </div>
+                    <div class="bcb_b">
+                        <a href="javascript:void(0);" data="{$cl._id}" class="bl_comment_btn">补充</a>
+                    </div>
+                </div>
+                {:W('Comment/index',array('id'=>$cl['_id']))}
+            </div>
+        </div>
+        </volist>
+
+        <if condition="cookie('id') eq $theme['uid']">
+        <div class="bbs_comment" ng-app="app">
+            <form action="{:U('child_post')}" method="post">
+                <input type="hidden" name="tid" value="{$theme._id}">
+
+                <div class="add_title xTipF">
+                    <input type="text" name="title" ng-model="search" autocomplete="off" id="giveTips" placeholder="小标题">
+                    <div class="xTip shadow" ng-controller="ListCtrl">
+                        <p ng-repeat="l in list | filter:search">{{ l }}</p>
+                    </div>
+                </div>
+                <div class="add_description">
+                    <textarea name="content" placeholder="正文.."></textarea>
+                </div>
+                 <div class="add_submit">
+                     <input type="submit" value="添加">
+                 </div>
+             </form>
+        </div>
+        </if>
+    </div>
+</div>
+
+</body>
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/angular.js"></script>
+<script type="text/javascript">
+var app = angular.module('app',[]);
+app.controller('ListCtrl',function($scope){
+    $scope.list = [
+        '主要业务','所属行业','市场前景','行业问题','产品服务',
+        '目标用户及价值主张','盈利模式','项目亮点','核心团队',
+        '融资计划','融资用途','参考资料','联系方式'
+    ];
+});
+
+$(function(){
+
+    $('#giveTips').on('focus',function(){
+        $('.xTip').show();
+        $(this).on('blur',function(){
+            $('.xTip').fadeOut(300);
+        })
+    });
+
+    $('.xTip').on('click','p',function(){
+        $('#giveTips').val($(this).text());
+        $('.xTip').hide();
+    });
+
+    $('.bl_comment_btn').on('click',function(){
+        var id = $(this).attr('data');
+        var comment = $('.input_'+id).val();
+        $('.input_'+id).val('');
+        if(!$.trim(comment)){
+            return false;
+        }
+        $.ajax({
+            url : '{:U("comment_post")}',
+            type : 'post',
+            dataType : 'json',
+            data : {
+                cid : id,
+                comment : comment
+            },
+            success : function(res){
+                if(res.status == 1){
+                    var cmt = '<div class="comment_item"><span class="fa fa-pencil-square-o"></span>';
+                    cmt += '<i>'+res.data.username+'</i><span class="fa fa-calendar-o ng-binding"></span>';
+                    cmt += '<i>'+res.data.time+'</i><p>'+res.data.comment+'</p></div>';
+                    $('.bl_comment_'+id).append(cmt);
+                }
+            }
+        });
+    });
+})
+</script>
+</html>
