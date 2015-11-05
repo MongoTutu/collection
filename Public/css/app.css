@@ -137,6 +137,8 @@ input{
 .article li h2{
     font-size: 16px;
 }
+.base{text-align: center;font-size: 12px;margin: 10px 0 -5px;}
+.base span{margin-right: 15px;color: #888;}
 .listDescription{
     margin-top: 6px;
     font-size: 12px;
@@ -150,6 +152,7 @@ input{
 }
 .listDetail span{font-size: 12px;}
 .listDetail i{font-size: 11px;margin: 0 20px 0 3px;}
+.listDetail small{font-size: 11px;margin-right: 10px;color: #999;}
 .add{
     position: fixed;
     right: 20px;

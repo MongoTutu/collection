@@ -120,7 +120,8 @@ $(function(){
             dataType : 'json',
             data : {
                 cid : id,
-                comment : comment
+                comment : comment,
+                tid : "{$_GET['id']}"
             },
             success : function(res){
                 if(res.status == 1){

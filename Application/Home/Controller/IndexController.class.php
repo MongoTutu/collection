@@ -10,7 +10,24 @@ class IndexController extends Controller {
     }
 
     public function index(){
-        $this->list = D('Common/Tie')->order('time desc')->select();
+        $base = array(
+            'All_Doc' => D('Common/Tie')->count(),
+            'New_Doc' => D('Common/Tie')->where(array('time'=>array('GT',time()-(7*86400))))->count(),
+            // 'All_Items' => D('Common/Tchild')->count(),
+            // 'New_Items' => D('Common/Tchild')->where(array('time'=>array('GT',time()-(7*86400))))->count(),
+            // 'All_Comment' => D('Common/Comment')->count(),
+            // 'New_Comment' => D('Common/Comment')->where(array('time'=>array('GT',time()-(7*86400))))->count()
+        );
+        $this->base = $base;
+
+        $list = D('Common/Tie')->order('time desc')->select();
+        foreach($list as $k=>$v){
+            $list[$k]['items'] = D('Common/Tchild')->where(array('tid'=>$v['_id']))->count();
+            $list[$k]['comments'] = D('Common/Comment')->where(array('tid'=>$v['_id']))->count();
+            $list[$k]['new_time'] = D('Common/Comment')->where(array('tid'=>$v['_id']))->order('time desc')->getfield('time');
+        }
+        $this->list = $list;
+
         $this->display();
     }
 
@@ -69,6 +86,7 @@ class IndexController extends Controller {
 
     public function comment_post(){
         $data['cid'] = I('cid');
+        $data['tid'] = I('tid');
         $data['comment'] = I('comment');
         $data['time'] = time();
         $data['uid'] = cookie('id');
