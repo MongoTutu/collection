@@ -21,6 +21,7 @@ class IndexController extends Controller {
         $this->base = $base;
 
         $list = D('Common/Tie')->order('time desc')->select();
+
         foreach($list as $k=>$v){
             $list[$k]['items'] = D('Common/Tchild')->where(array('tid'=>$v['_id']))->count();
             $list[$k]['comments'] = D('Common/Comment')->where(array('tid'=>$v['_id']))->count();
@@ -40,7 +41,7 @@ class IndexController extends Controller {
         if(!$data['title']){
             $this->error("主题不可以为空！");
         }
-        $data['description'] = I('description');
+        $data['description'] = str_replace(array("\r\n", "\r", "\n"), "", I('description'));
         $data['time'] = time();
         $data['uid'] = cookie('id');
         $data['username'] = cookie('username');
